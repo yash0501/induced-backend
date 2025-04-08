@@ -2,7 +2,7 @@ services:
   - type: web
     name: induced-backend
     env: node
-    buildCommand: npm install
+    buildCommand: npm install && npm run build
     startCommand: node dist/app.js
     nodeVersion: 22.14.0
     envVars:

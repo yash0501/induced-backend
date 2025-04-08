@@ -1,35 +1,27 @@
-// Production server wrapper
-console.log('Starting server from JavaScript build...');
+// Simple wrapper to start the application from compiled JavaScript
+console.log('Starting application from compiled JavaScript...');
 try {
-  // Check if dist folder exists and app.js is there
-  const fs = require('fs');
-  if (fs.existsSync('./dist/app.js')) {
-    require('./dist/app.js');
-  } else {
-    console.error('Error: dist/app.js not found!');
-    console.log('Contents of current directory:');
-    console.log(fs.readdirSync('.'));
-    
-    if (fs.existsSync('./dist')) {
-      console.log('Contents of dist directory:');
-      console.log(fs.readdirSync('./dist'));
-    } else {
-      console.error('dist directory not found!');
-    }
-    
-    // Simple express server as fallback
-    const express = require('express');
-    const app = express();
-    const port = process.env.PORT || 3000;
-    
-    app.get('/', (req, res) => {
-      res.send('Build error - compiled app not found. Please check logs.');
-    });
-    
-    app.listen(port, () => {
-      console.log(`Fallback server running on port ${port}`);
-    });
-  }
+  // First try to load the compiled app
+  require('./dist/app.js');
 } catch (error) {
-  console.error('Failed to start server:', error);
+  console.error('Error loading compiled app:', error);
+  
+  // Fallback to a simple express server if dist/app.js doesn't exist
+  const express = require('express');
+  const app = express();
+  const port = process.env.PORT || 3000;
+  
+  // Display an error message
+  app.get('/', (req, res) => {
+    res.send('Build error - compiled app not found. Please check build process.');
+  });
+  
+  // Health check for Render
+  app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'healthy', message: 'Fallback server running' });
+  });
+  
+  app.listen(port, () => {
+    console.log(`Fallback server running on port ${port}`);
+  });
 }
