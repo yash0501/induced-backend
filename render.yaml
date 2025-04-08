@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: induced-backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    nodeVersion: 22.14.0
+    envVars:
+      - key: NODE_ENV
+        value: production

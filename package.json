@@ -4,7 +4,7 @@
   "description": "A basic Node.js backend application using TypeScript.",
   "main": "dist/app.js",
   "scripts": {
-    "start": "node dist/app.js",
+    "start": "node dist/app.js || node start.js",
     "build": "tsc",
     "postinstall": "npm run build",
     "test": "jest",
