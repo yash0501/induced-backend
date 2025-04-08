@@ -2,12 +2,13 @@
   "name": "nodejs-typescript-backend",
   "version": "1.0.0",
   "description": "A basic Node.js backend application using TypeScript.",
-  "main": "src/app.ts",
+  "main": "dist/app.js",
   "scripts": {
     "start": "node dist/app.js",
     "build": "tsc",
+    "postinstall": "npm run build",
     "test": "jest",
-    "dev": "nodemon src/app.ts"
+    "dev": "nodemon --exec ts-node src/app.ts"
   },
   "dependencies": {
     "axios": "^1.8.4",
