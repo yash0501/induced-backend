@@ -1,11 +1,17 @@
 import { Request, Response } from 'express';
 import { User, ApiKey } from '../models';
 import bcrypt from 'bcrypt';
-import jwt, { SignOptions } from 'jsonwebtoken';
+import jwt, { Secret, SignOptions } from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
+import dotenv from 'dotenv';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+// Ensure environment variables are loaded
+dotenv.config();
+
+const JWT_SECRET: Secret = process.env.JWT_SECRET || 'your-secret-key';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
+
+console.log('Using JWT_SECRET (auth controller):', JWT_SECRET);
 
 export default class AuthController {
   // Register a new user
@@ -37,10 +43,12 @@ export default class AuthController {
         name: name || null
       });
 
-      // Generate JWT token
-      const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
-        expiresIn: JWT_EXPIRES_IN
-      } as SignOptions);
+      // Generate JWT token with proper types
+      const token = jwt.sign(
+        { userId: user.id }, 
+        JWT_SECRET, 
+        { expiresIn: JWT_EXPIRES_IN } as SignOptions
+      );
 
       res.status(201).json({
         message: 'User registered successfully',
@@ -82,10 +90,12 @@ export default class AuthController {
         return;
       }
 
-      // Generate JWT token
-      const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
-        expiresIn: JWT_EXPIRES_IN
-      } as SignOptions);
+      // Generate JWT token with proper types
+      const token = jwt.sign(
+        { userId: user.id }, 
+        JWT_SECRET, 
+        { expiresIn: JWT_EXPIRES_IN } as SignOptions
+      );
 
       res.status(200).json({
         message: 'Login successful',
